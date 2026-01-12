@@ -22,6 +22,12 @@ function App() {
   const [onboardingComplete, setOnboardingComplete] = useState(null);
 
   useEffect(() => {
+    // Safety check: specific handling if supabase client is null (config error)
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session) checkProfile(session.user.id);
@@ -37,6 +43,23 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  if (!supabase) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4">
+        <div className="bg-red-500/10 border border-red-500 rounded-lg p-6 max-w-md text-center">
+          <h2 className="text-xl font-bold text-red-400 mb-4">Error de Conexión</h2>
+          <p className="text-slate-300 mb-4">
+            No se ha podido conectar con el servidor (Supabase).
+            Esto suele deberse a que faltan las variables de entorno en Vercel.
+          </p>
+          <p className="text-xs text-slate-500 font-mono bg-black/50 p-2 rounded">
+            VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY no detectadas.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const checkProfile = async (userId) => {
     try {
