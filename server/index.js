@@ -195,26 +195,11 @@ app.post('/api/admin/config', (req, res) => {
   }
 });
 
-const scenarios = require('./scenarios');
-
-app.get('/api/scenarios', (req, res) => {
-  res.json(scenarios);
-});
+// const scenarios = require('./scenarios');
 
 const getSystemMessage = (scenarioId) => {
-  for (const level of scenarios) {
-    if (level.modules) {
-      for (const module of level.modules) {
-        if (module.lessons) {
-          const lesson = module.lessons.find(l => l.id === scenarioId);
-          if (lesson) {
-            return { role: 'system', content: lesson.system_prompt };
-          }
-        }
-      }
-    }
-  }
-  return { role: 'system', content: 'You are a helpful language tutor (Default Context).' };
+  // Placeholder for ATS mode
+  return { role: 'system', content: "You are an AI assistant." };
 };
 
 const { getPlanConfig } = require('./services/profileRules');
