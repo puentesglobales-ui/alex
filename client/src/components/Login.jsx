@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Added Link
 import api from '../services/api';
-import { Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion'; // Added motion import
+import { Loader2, ArrowLeft, Globe } from 'lucide-react'; // Added ArrowLeft, Globe
+import { motion } from 'framer-motion';
 
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState(''); // Simple password login for MVP
+    const [password, setPassword] = useState('');
     const [accessCode, setAccessCode] = useState('');
     const [isSignUp, setIsSignUp] = useState(false);
-    const [accountType, setAccountType] = useState('student'); // 'student' or 'freemium'
+    const [accountType, setAccountType] = useState('student');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -22,17 +22,12 @@ export default function Login() {
 
         try {
             if (isSignUp) {
-                // 1. Verify Access Code if Student
                 if (accountType === 'student') {
                     if (accessCode.length < 6) {
                         throw new Error('El código debe tener 6 caracteres.');
                     }
-                    // Optional: Call verify-code endpoint here if needed, or rely on backend constraint
-                    // const codeCheck = await api.post('/verify-code', { code: accessCode });
-                    // if (!codeCheck.data.valid) throw new Error('Código inválido');
                 }
 
-                // 2. Proceed with Signup
                 const { error } = await supabase.auth.signUp({
                     email,
                     password,
@@ -47,7 +42,6 @@ export default function Login() {
                 if (error) throw error;
                 setMessage('¡Registro exitoso! Revisa tu email para confirmar.');
 
-                // Redirect based on type
                 if (accountType === 'freemium') {
                     navigate('/payment-setup');
                 } else {
@@ -59,7 +53,6 @@ export default function Login() {
                     password,
                 });
                 if (error) throw error;
-                // Navigation handled by App.jsx or explicitly:
                 navigate('/languages');
             }
         } catch (error) {
@@ -70,83 +63,121 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-            <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100">
-                <div className="flex justify-center mb-6">
-                    <img src="/home/logo.jpg" alt="Puentes Globales" className="h-40 w-auto object-contain" />
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Effects matching Landing */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[100px]"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[100px]"></div>
+            </div>
+
+            <div className="absolute top-6 left-6 z-10">
+                <Link to="/" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                    <ArrowLeft size={20} /> Volver al inicio
+                </Link>
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-slate-900/50 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-800 relative z-10"
+            >
+                <div className="flex justify-center mb-8">
+                    <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center border border-blue-500/20">
+                        <Globe className="text-blue-400 w-8 h-8" />
+                    </div>
                 </div>
-                <h1 className="text-3xl font-extrabold text-slate-900 mb-2 text-center">
+
+                <h1 className="text-3xl font-bold text-white mb-2 text-center tracking-tight">
                     {isSignUp ? 'Crear Cuenta' : 'Bienvenido'}
                 </h1>
+                <p className="text-slate-400 text-center mb-8 text-sm">
+                    {isSignUp ? 'Únete a la comunidad de profesionales globales' : 'Ingresa para continuar tu preparación'}
+                </p>
 
                 {/* LOGIN / SIGNUP TOGGLE */}
-                <div className="flex justify-center gap-4 mb-6 text-sm">
-                    <button onClick={() => setIsSignUp(false)} className={`pb-1 border-b-2 transition-colors ${!isSignUp ? 'border-cyan-500 text-cyan-600 font-bold' : 'border-transparent text-slate-400'}`}>Iniciar Sesión</button>
-                    <button onClick={() => setIsSignUp(true)} className={`pb-1 border-b-2 transition-colors ${isSignUp ? 'border-cyan-500 text-cyan-600 font-bold' : 'border-transparent text-slate-400'}`}>Registrarse</button>
+                <div className="flex justify-center gap-4 mb-8 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                    <button
+                        onClick={() => setIsSignUp(false)}
+                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${!isSignUp ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        Iniciar Sesión
+                    </button>
+                    <button
+                        onClick={() => setIsSignUp(true)}
+                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${isSignUp ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        Registrarse
+                    </button>
                 </div>
 
                 <form onSubmit={handleAuth} className="space-y-5">
                     {/* ACCOUNT TYPE SELECTOR IN SIGNUP */}
                     {isSignUp && (
-                        <div className="flex bg-slate-100 p-1 rounded-xl mb-4">
-                            <button
-                                type="button"
-                                onClick={() => setAccountType('student')}
-                                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${accountType === 'student' ? 'bg-white text-cyan-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Soy Alumno
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setAccountType('freemium')}
-                                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${accountType === 'freemium' ? 'bg-white text-cyan-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Prueba Gratis 7 Días
-                            </button>
+                        <div className="flex flex-col gap-2 mb-4">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tipo de cuenta</label>
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setAccountType('student')}
+                                    className={`flex-1 py-3 px-2 rounded-xl text-sm font-semibold border transition-all ${accountType === 'student' ? 'bg-blue-600/10 border-blue-500/50 text-blue-400' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700'}`}
+                                >
+                                    Soy Alumno
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setAccountType('freemium')}
+                                    className={`flex-1 py-3 px-2 rounded-xl text-sm font-semibold border transition-all ${accountType === 'freemium' ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-400' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700'}`}
+                                >
+                                    Prueba Gratis
+                                </button>
+                            </div>
                         </div>
                     )}
 
-                    <div>
-                        <label className="block text-slate-700 text-sm font-bold mb-2">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all shadow-sm"
-                            placeholder="tu@email.com"
-                            required
-                        />
-                    </div>
-
-                    {isSignUp && accountType === 'student' && (
-                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
-                            <label className="block text-slate-700 text-sm font-bold mb-2">Código de Alumno (6 Caracteres)</label>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">Email</label>
                             <input
-                                type="text"
-                                value={accessCode}
-                                onChange={(e) => setAccessCode(e.target.value)}
-                                className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all shadow-sm"
-                                placeholder="Ej: 123456"
-                                minLength={6}
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                                placeholder="tu@email.com"
                                 required
                             />
-                        </motion.div>
-                    )}
+                        </div>
 
-                    <div>
-                        <label className="block text-slate-700 text-sm font-bold mb-2">Contraseña</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all shadow-sm"
-                            placeholder="••••••••"
-                            required
-                        />
+                        {isSignUp && accountType === 'student' && (
+                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                                <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">Código de Alumno</label>
+                                <input
+                                    type="text"
+                                    value={accessCode}
+                                    onChange={(e) => setAccessCode(e.target.value)}
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                                    placeholder="Código de 6 dígitos"
+                                    minLength={6}
+                                    required
+                                />
+                            </motion.div>
+                        )}
+
+                        <div>
+                            <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">Contraseña</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                                placeholder="••••••••"
+                                required
+                            />
+                        </div>
                     </div>
 
                     {message && (
-                        <div className={`p-3 rounded-xl text-sm ${message.includes('exitoso') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        <div className={`p-3 rounded-xl text-sm flex items-center gap-2 ${message.includes('exitoso') ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
                             {message}
                         </div>
                     )}
@@ -154,7 +185,7 @@ export default function Login() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-4 rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-900/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {loading && <Loader2 className="animate-spin" size={20} />}
                         {isSignUp ? 'Crear Cuenta' : 'Entrar'}
@@ -165,12 +196,12 @@ export default function Login() {
                     {isSignUp ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
                     <button
                         onClick={() => setIsSignUp(!isSignUp)}
-                        className="ml-2 text-cyan-600 font-bold hover:text-cyan-700 transition-colors"
+                        className="ml-2 text-blue-400 font-bold hover:text-blue-300 transition-colors"
                     >
                         {isSignUp ? 'Ingresa aquí' : 'Regístrate gratis'}
                     </button>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }
