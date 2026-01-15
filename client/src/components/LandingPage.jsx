@@ -24,43 +24,43 @@ const LandingPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30">
+        <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-cyan-500/30">
 
             {/* --- NAVIGATION BAR --- */}
-            <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-lg border-b border-white/10">
-                <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform">
-                            <Globe className="text-white w-5 h-5" />
+            <nav className="fixed top-0 w-full z-50 bg-slate-950/90 backdrop-blur-lg border-b border-cyan-500/10">
+                <div className="container mx-auto px-6 py-5 flex items-center justify-between">
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 bg-cyan-600 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-lg shadow-cyan-500/20">
+                            <Globe className="text-white w-6 h-6" />
                         </div>
-                        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+                        <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                             Puentes Globales
                         </span>
                     </Link>
 
                     {/* Desktop Modules Link */}
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                        <Link to="/ats-scanner" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                            <FileText size={16} /> Scanner ATS
+                    <div className="hidden md:flex items-center gap-10 text-base font-medium text-slate-300">
+                        <Link to="/ats-scanner" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
+                            <FileText size={18} /> Scanner ATS
                         </Link>
-                        <Link to="/interview" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                            <UserCheck size={16} /> Roleplay Entrevista
+                        <Link to="/interview" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
+                            <UserCheck size={18} /> Roleplay Entrevista
                         </Link>
-                        <Link to="/dashboard" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                            <Bot size={16} /> Talkme AI
+                        <Link to="/dashboard" className="hover:text-cyan-400 transition-colors flex items-center gap-2">
+                            <Bot size={18} /> Talkme AI
                         </Link>
                     </div>
 
                     {/* CTA Button */}
                     <div className="hidden md:flex items-center gap-4">
-                        <Link to="/login" className="px-5 py-2 bg-white text-slate-900 rounded-full font-bold hover:bg-blue-50 transition-colors text-sm">
+                        <Link to="/login" className="px-6 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full font-bold hover:shadow-lg hover:shadow-cyan-500/25 transition-all text-base">
                             Ingresar
                         </Link>
                     </div>
 
                     {/* Mobile Menu Toggle */}
                     <button className="md:hidden text-slate-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                        {isMenuOpen ? <X /> : <Menu />}
+                        {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
                     </button>
                 </div>
 
@@ -71,80 +71,78 @@ const LandingPage = () => {
                         animate={{ opacity: 1, height: 'auto' }}
                         className="md:hidden bg-slate-900 border-b border-white/10"
                     >
-                        <div className="px-6 py-4 flex flex-col gap-4">
-                            <Link to="/ats-scanner" className="text-slate-300 hover:text-white py-2 border-b border-white/5">Scanner ATS</Link>
-                            <Link to="/interview" className="text-slate-300 hover:text-white py-2 border-b border-white/5">Roleplay Entrevista</Link>
-                            <Link to="/dashboard" className="text-slate-300 hover:text-white py-2 border-b border-white/5">Talkme AI</Link>
-                            <Link to="/login" className="text-blue-400 font-bold py-2">Ingresar / Registrarse</Link>
+                        <div className="px-6 py-6 flex flex-col gap-6 text-lg">
+                            <Link to="/ats-scanner" className="text-slate-300 hover:text-cyan-400 py-2 border-b border-white/5">Scanner ATS</Link>
+                            <Link to="/interview" className="text-slate-300 hover:text-cyan-400 py-2 border-b border-white/5">Roleplay Entrevista</Link>
+                            <Link to="/dashboard" className="text-slate-300 hover:text-cyan-400 py-2 border-b border-white/5">Talkme AI</Link>
+                            <Link to="/login" className="text-cyan-400 font-bold py-2">Ingresar / Registrarse</Link>
                         </div>
                     </motion.div>
                 )}
             </nav>
 
             {/* 1. HERO SECTION */}
-            <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden">
-                {/* Background Effects */}
+            <section className="relative min-h-[90vh] flex items-center justify-center pt-24 overflow-hidden bg-slate-950">
+                {/* Abstract Background (NO PHOTOS) */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src="/img/landing/uploaded_image_0_1768144162832.jpg"
-                        alt="Hero Background"
-                        className="w-full h-full object-cover opacity-20"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent"></div>
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950/0 to-slate-950"></div>
+                    <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] filter mix-blend-screen"></div>
+                    <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] filter mix-blend-screen"></div>
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
                 </div>
 
                 <div className="relative z-10 container mx-auto px-6 text-center">
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 mb-8 backdrop-blur-sm">
-                            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                            <span className="text-sm font-semibold tracking-wide uppercase">Plataforma Integral de Carrera</span>
+                        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-cyan-950/30 border border-cyan-500/30 text-cyan-300 mb-10 backdrop-blur-sm">
+                            <span className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"></span>
+                            <span className="text-base font-bold tracking-wide uppercase">Plataforma Integral de Carrera</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight text-white">
+                        <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tight text-white">
                             Emigrar no es suerte.<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Es Estrategia.</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 drop-shadow-sm">
+                                Es Estrategia.
+                            </span>
                         </h1>
 
-                        <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto mb-12">
+                        <p className="text-2xl md:text-3xl text-slate-300 font-light max-w-4xl mx-auto mb-16 leading-relaxed">
                             La primera suite de herramientas impulsadas por IA diseñada específicamente para profesionales latinos que buscan su futuro en Europa.
                         </p>
 
                         {/* MAIN UTILITIES GRID (Direct Access) */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-left">
                             {/* Card 1: ATS */}
-                            <Link to="/ats-scanner" className="group p-6 bg-slate-900/50 border border-slate-800 rounded-2xl hover:border-blue-500/50 hover:bg-slate-800/80 transition-all cursor-pointer">
-                                <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <FileText className="text-blue-400" />
+                            <Link to="/ats-scanner" className="group p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all cursor-pointer hover:shadow-[0_0_30px_rgba(34,211,238,0.1)]">
+                                <div className="w-16 h-16 bg-cyan-600/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <FileText className="text-cyan-400 w-8 h-8" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">Scanner ATS</h3>
-                                <p className="text-slate-400 text-sm">Analiza tu CV contra ofertas reales y descubre por qué no te llaman.</p>
-                                <div className="mt-4 flex items-center text-blue-400 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Probar ahora <ArrowRight size={14} className="ml-1" />
+                                <h3 className="text-3xl font-bold text-white mb-3">Scanner ATS</h3>
+                                <p className="text-slate-400 text-lg">Analiza tu CV contra ofertas reales y descubre por qué no te llaman.</p>
+                                <div className="mt-6 flex items-center text-cyan-400 text-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Probar ahora <ArrowRight size={20} className="ml-2" />
                                 </div>
                             </Link>
 
                             {/* Card 2: Interview */}
-                            <Link to="/interview" className="group p-6 bg-slate-900/50 border border-slate-800 rounded-2xl hover:border-emerald-500/50 hover:bg-slate-800/80 transition-all cursor-pointer">
-                                <div className="w-12 h-12 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <UserCheck className="text-emerald-400" />
+                            <Link to="/interview" className="group p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-blue-500/50 hover:bg-slate-800/80 transition-all cursor-pointer hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                                <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <UserCheck className="text-blue-400 w-8 h-8" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">Roleplay Entrevista</h3>
-                                <p className="text-slate-400 text-sm">Simula entrevistas técnicas y de RRHH con feedback en tiempo real.</p>
-                                <div className="mt-4 flex items-center text-emerald-400 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Practicar ahora <ArrowRight size={14} className="ml-1" />
+                                <h3 className="text-3xl font-bold text-white mb-3">Roleplay Entrevista</h3>
+                                <p className="text-slate-400 text-lg">Simula entrevistas técnicas y de RRHH con feedback en tiempo real.</p>
+                                <div className="mt-6 flex items-center text-blue-400 text-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Practicar ahora <ArrowRight size={20} className="ml-2" />
                                 </div>
                             </Link>
 
                             {/* Card 3: Talkme */}
-                            <Link to="/dashboard" className="group p-6 bg-slate-900/50 border border-slate-800 rounded-2xl hover:border-purple-500/50 hover:bg-slate-800/80 transition-all cursor-pointer">
-                                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <Bot className="text-purple-400" />
+                            <Link to="/dashboard" className="group p-8 bg-slate-900 border border-slate-800 rounded-3xl hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all cursor-pointer hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                                <div className="w-16 h-16 bg-indigo-600/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <Bot className="text-indigo-400 w-8 h-8" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">Talkme AI</h3>
-                                <p className="text-slate-400 text-sm">Tu coach de idiomas inteligente disponible 24/7.</p>
-                                <div className="mt-4 flex items-center text-purple-400 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Chatear ahora <ArrowRight size={14} className="ml-1" />
+                                <h3 className="text-3xl font-bold text-white mb-3">Talkme AI</h3>
+                                <p className="text-slate-400 text-lg">Tu coach de idiomas inteligente disponible 24/7.</p>
+                                <div className="mt-6 flex items-center text-indigo-400 text-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Chatear ahora <ArrowRight size={20} className="ml-2" />
                                 </div>
                             </Link>
                         </div>
@@ -153,51 +151,60 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* 2. SOMOS PUENTES GLOBALES (Modernizado) */}
-            <section className="py-24 bg-slate-950 relative border-t border-white/5">
+            {/* 2. SOMOS PUENTES GLOBALES (Modernizado - SIN FOTOS) */}
+            <section className="py-28 bg-slate-950 relative border-t border-slate-900">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div>
-                            <h2 className="text-blue-500 font-bold tracking-wider uppercase mb-3 text-sm">Metodología Comprobada</h2>
-                            <h3 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                            <h2 className="text-cyan-500 font-bold tracking-widest uppercase mb-4 text-lg">Metodología Comprobada</h2>
+                            <h3 className="text-4xl md:text-6xl font-black mb-8 leading-none">
                                 Más que una plataforma,<br />tu ecosistema de éxito.
                             </h3>
-                            <p className="text-lg text-slate-400 mb-6">
-                                En Puentes Globales no solo te damos herramientas; te damos un sistema. Integramos tecnología de punta con la experiencia humana de haber recorrido el camino.
+                            <p className="text-2xl text-slate-400 mb-8 leading-relaxed font-light">
+                                En Puentes Globales no solo te damos herramientas; te damos un sistema. Integramos tecnología de punta con la experiencia humana.
                             </p>
-                            <ul className="space-y-4">
-                                <li className="flex items-center gap-3">
-                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={14} /></div>
-                                    <span className="text-slate-300">Validación de perfil profesional (Europa & USA)</span>
+                            <ul className="space-y-6">
+                                <li className="flex items-center gap-4">
+                                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={20} /></div>
+                                    <span className="text-slate-200 text-xl">Validación de perfil profesional (Europa & USA)</span>
                                 </li>
-                                <li className="flex items-center gap-3">
-                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={14} /></div>
-                                    <span className="text-slate-300">Entrenamiento de soft-skills y confianza</span>
+                                <li className="flex items-center gap-4">
+                                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={20} /></div>
+                                    <span className="text-slate-200 text-xl">Entrenamiento de soft-skills y confianza</span>
                                 </li>
-                                <li className="flex items-center gap-3">
-                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={14} /></div>
-                                    <span className="text-slate-300">Networking estratégico</span>
+                                <li className="flex items-center gap-4">
+                                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle size={20} /></div>
+                                    <span className="text-slate-200 text-xl">Networking estratégico</span>
                                 </li>
                             </ul>
                         </div>
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl transform rotate-3 blur-lg opacity-30"></div>
-                            <img src="/img/landing/uploaded_image_2_1768150943006.jpg" className="relative rounded-3xl shadow-2xl border border-white/10" alt="Dashboard Preview" />
+
+                        {/* Abstract Representation instead of Photo */}
+                        <div className="relative h-[500px] w-full bg-gradient-to-tr from-slate-900 to-slate-800 rounded-[3rem] border border-cyan-500/20 overflow-hidden flex items-center justify-center group">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(34,211,238,0.1),transparent_70%)]"></div>
+                            <Globe size={200} className="text-slate-800 group-hover:text-cyan-900/50 transition-colors duration-700" strokeWidth={0.5} />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="text-center">
+                                    <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-300 to-blue-600 opacity-20 select-none">GLOBAL</div>
+                                    <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-300 to-blue-600 opacity-20 select-none">MINDSET</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* 3. CTA FINAL */}
-            <section className="py-24 relative overflow-hidden">
-                <div className="absolute inset-0 bg-blue-900/20"></div>
-                <div className="container mx-auto px-6 relative z-10 text-center">
-                    <h2 className="text-4xl font-bold mb-8">¿Listo para dar el salto?</h2>
-                    <div className="flex flex-col md:flex-row justify-center gap-4">
-                        <Link to="/login" className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-slate-100 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+            <section className="py-32 relative overflow-hidden bg-slate-950 border-t border-slate-900">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]"></div>
+
+                <div className="relative container mx-auto px-6 text-center z-10">
+                    <h2 className="text-5xl md:text-7xl font-bold mb-10 text-white">¿Listo para dar el salto?</h2>
+                    <div className="flex flex-col md:flex-row justify-center gap-6">
+                        <Link to="/login" className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full font-bold text-xl hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] transition-all transform hover:-translate-y-1">
                             Crear Cuenta Gratuita
                         </Link>
-                        <a href="https://calendly.com/puentesglobales" target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-transparent border border-white/20 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all">
+                        <a href="https://calendly.com/puentesglobales" target="_blank" rel="noopener noreferrer" className="px-10 py-5 bg-transparent border border-white/10 text-white rounded-full font-bold text-xl hover:bg-white/5 transition-all outline-none focus:ring-2 focus:ring-cyan-500">
                             Agendar Mentoría
                         </a>
                     </div>
@@ -205,8 +212,8 @@ const LandingPage = () => {
             </section>
 
             {/* FOOTER */}
-            <footer className="bg-slate-950 py-12 border-t border-slate-900">
-                <div className="container mx-auto px-6 text-center text-slate-500 text-sm">
+            <footer className="bg-slate-950 py-16 border-t border-slate-900/50">
+                <div className="container mx-auto px-6 text-center text-slate-500 text-base">
                     <p>&copy; 2026 Puentes Globales. Todos los derechos reservados.</p>
                 </div>
             </footer>
