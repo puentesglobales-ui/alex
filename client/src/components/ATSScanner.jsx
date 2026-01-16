@@ -73,7 +73,7 @@ const ATSScanner = ({ session }) => {
             >
                 AI Career Mastery Engine
             </motion.h1>
-            <p className="text-slate-400 mb-8 text-center">Auditoría ATS & Filtro de Calidad (Nivel Profesional)</p>
+            <p className="text-slate-400 mb-8 text-center">Auditoría de Calidad & Estándar Europass (IA)</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
                 {/* INPUT SECTION */}
@@ -266,7 +266,7 @@ const ATSScanner = ({ session }) => {
                             {/* Formatting Issues (Locked logic if needed, but usually open? Let's check backend) */}
                             {result.formatting_analysis?.issues?.length > 0 && (
                                 <div>
-                                    <h4 className="text-slate-400 text-sm uppercase font-bold mb-2">⚠️ Formato</h4>
+                                    <h4 className="text-slate-400 text-sm uppercase font-bold mb-2">⚠️ Formato & Europass Compliance</h4>
                                     <ul className="space-y-1">
                                         {result.formatting_analysis.issues.map((iss, i) => (
                                             <li key={i} className="text-xs text-orange-300">• {iss}</li>
