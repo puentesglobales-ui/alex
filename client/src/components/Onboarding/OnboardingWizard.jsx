@@ -70,7 +70,7 @@ const StepCV = ({ value, onChange }) => (
 
 const StepWorkProbe = ({ value, onChange }) => (
     <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-white mb-2">Contexto Laboral</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Contexto Profesional (V2)</h2>
         <p className="text-slate-400 mb-6">Para simular entrevistas reales, cuéntanos un poco sobre tu día a día.</p>
 
         <div>
