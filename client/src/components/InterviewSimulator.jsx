@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, MicOff, Volume2, User, Cpu, Award } from 'lucide-react';
 import api from '../services/api';
+import AudioRecorder from './AudioRecorder';
 
 const InterviewSimulator = ({ session }) => {
     // Session State
@@ -95,6 +96,43 @@ const InterviewSimulator = ({ session }) => {
     // Implementing text input for stability first, enabling Speech later
     const [inputText, setInputText] = useState('');
 
+    const handleAudioUpload = async (audioBlob) => {
+        setIsListening(true);
+
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'voice.webm');
+        formData.append('cvText', cvText);
+        formData.append('jobDescription', jobDesc);
+        formData.append('messages', JSON.stringify(messages));
+
+        try {
+            const res = await api.post('/interview/speak', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            const { userText, assistantText, audioBase64 } = res.data;
+
+            const newHistory = [...messages,
+            { role: 'user', content: userText },
+            { role: 'assistant', content: assistantText }
+            ];
+            setMessages(newHistory);
+
+            if (audioBase64) {
+                const audio = new Audio(`data:audio/mp3;base64,${audioBase64}`);
+                setIsSpeaking(true);
+                audio.onended = () => setIsSpeaking(false);
+                audio.play().catch(e => console.error("Audio playback error:", e));
+            }
+
+        } catch (e) {
+            console.error(e);
+            alert("Error procesando audio. ¿Servidor online?");
+        } finally {
+            setIsListening(false);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-black text-white p-4 flex flex-col md:flex-row gap-4">
             {/* LEFT: AVATAR / CONFIG */}
@@ -158,6 +196,8 @@ const InterviewSimulator = ({ session }) => {
                 {/* CONTROLS */}
                 {started && (
                     <div className="h-24 bg-slate-900 rounded-3xl p-4 border border-slate-800 flex items-center gap-4">
+                        <AudioRecorder onRecordingComplete={handleAudioUpload} isProcessing={isListening} />
+
                         <input
                             type="text"
                             value={inputText}

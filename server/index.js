@@ -280,7 +280,7 @@ app.post('/api/profile', async (req, res) => {
     res.json({ success: true, message: 'Profile saved' });
   } catch (err) {
     console.error('Profile Save Error:', err);
-    res.status(500).json({ error: 'Failed to save profile' });
+    res.status(500).json({ error: 'Failed to save profile', details: err.message });
   }
 });
 
@@ -463,6 +463,112 @@ app.post('/api/interview/chat', async (req, res) => {
   } catch (error) {
     console.error('Interview Chat Error:', error);
     res.status(500).json({ error: 'Failed to chat' });
+  }
+});
+
+app.post('/api/interview/speak', upload.single('audio'), async (req, res) => {
+  const audioFile = req.file;
+  const { cvText, jobDescription, messages } = req.body;
+
+  let parsedMessages = [];
+  try {
+    parsedMessages = typeof messages === 'string' ? JSON.parse(messages) : (messages || []);
+  } catch (e) {
+    parsedMessages = [];
+    console.error("Error parsing messages json", e);
+  }
+
+  if (!audioFile) {
+    return res.status(400).json({ error: 'No audio file uploaded' });
+  }
+
+  let currentStage = 'INIT';
+
+  try {
+    // 1. STT: Whisper
+    currentStage = 'STT (Whisper)';
+    const path = require('path');
+    const ext = path.extname(audioFile.originalname) || '.m4a';
+
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(audioFile.path), `audio${ext}`);
+    formData.append('model', 'whisper-1');
+
+    const transcriptionResponse = await axios.post(
+      'https://api.openai.com/v1/audio/transcriptions',
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.trim() : ''}`
+        }
+      }
+    );
+    const userText = transcriptionResponse.data.text;
+    console.log('[Interview Speak] User said:', userText);
+
+    // 2. Chat: Interview Coach
+    currentStage = 'LLM (InterviewCoach)';
+    // Append user's spoken text to history
+    const newHistory = [...parsedMessages, { role: 'user', content: userText }];
+
+    // Get AI response
+    // Ensure we handle promise correctly if interviewCoach is async (it is)
+    const assistantText = await interviewCoach.getInterviewResponse(newHistory, cvText, jobDescription);
+    console.log('[Interview Speak] AI said:', assistantText);
+
+    // 3. TTS: ElevenLabs
+    currentStage = 'TTS (ElevenLabs)';
+
+    const crypto = require('crypto');
+    const cacheDir = 'audio_cache';
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+
+    const ELEVENLABS_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
+
+    const hash = crypto.createHash('md5').update(assistantText + ELEVENLABS_VOICE_ID).digest('hex');
+    const cachePath = path.join(cacheDir, `${hash}.mp3`);
+
+    let audioBase64;
+
+    if (fs.existsSync(cachePath)) {
+      audioBase64 = fs.readFileSync(cachePath).toString('base64');
+    } else {
+      const elevenKey = process.env.ELEVENLABS_KEY_NEW
+        ? process.env.ELEVENLABS_KEY_NEW.trim()
+        : (process.env.ELEVENLABS_API_KEY ? process.env.ELEVENLABS_API_KEY.trim() : '');
+
+      const ttsResponse = await axios.post(
+        `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
+        {
+          text: assistantText,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        },
+        {
+          headers: {
+            'xi-api-key': elevenKey,
+            'Content-Type': 'application/json'
+          },
+          responseType: 'arraybuffer'
+        }
+      );
+
+      fs.writeFileSync(cachePath, Buffer.from(ttsResponse.data));
+      audioBase64 = Buffer.from(ttsResponse.data).toString('base64');
+    }
+
+    res.json({
+      userText,
+      assistantText,
+      audioBase64
+    });
+
+  } catch (error) {
+    console.error(`Error in /api/interview/speak [${currentStage}]:`, error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Processing failed', stage: currentStage, details: error.message });
+  } finally {
+    cleanup(audioFile.path);
   }
 });
 

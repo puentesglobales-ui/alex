@@ -4,9 +4,18 @@ const axios = require('axios');
 const FormData = require('form-data');
 const OpenAI = require('openai');
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+
+
+// Initialize inside function to avoid top-level crash if env missing during load
+let openai;
+function getOpenAI() {
+    if (!openai) {
+        openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.trim() : 'dummy', // Prevent crash, fail at call time
+        });
+    }
+    return openai;
+}
 
 // Helper to delete file
 const cleanup = (filePath) => {
@@ -74,7 +83,7 @@ const processTranslation = async ({ audioPath, fromLang, toLang, userId }) => {
               - Output ONLY the translated text. Do not add explanations or notes.
               - If the input is empty or unintelligible, reply with "..."`;
 
-                const completion = await openai.chat.completions.create({
+                const completion = await getOpenAI().chat.completions.create({
                     model: "gpt-4o",
                     messages: [
                         { role: 'system', content: systemPrompt },
