@@ -125,12 +125,13 @@ class AIRouter {
         // DeepSeek / Challenger Path
         if (providerConfig.llm === 'deepseek-chat') {
             try {
-                // For MVP, we might not have a full DeepSeek chat adapter yet.
-                // We'll fallback to OpenAI for stability unless explicitly implemented.
-                // return await chatWithDeepSeek(messages);
-                console.log("⚠️ DeepSeek Chat not fully implemented, falling back to OpenAI.");
+                console.log("🚀 Routing to DeepSeek V3...");
+                return await chatWithDeepSeek(messages, options);
             } catch (e) {
                 console.error("DeepSeek Chat Error:", e);
+                // Fallback will naturally happen if we don't return here?
+                // No, we should probably throw or handle fallback specifically
+                console.log("⚠️ DeepSeek Failed, falling back to OpenAI.");
             }
         }
 

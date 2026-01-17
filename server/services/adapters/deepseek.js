@@ -31,4 +31,24 @@ const translateWithDeepSeek = async (text, fromLang, toLang) => {
     }
 };
 
-module.exports = { translateWithDeepSeek };
+const chatWithDeepSeek = async (messages, options = {}) => {
+    try {
+        const response = await deepseek.chat.completions.create({
+            model: "deepseek-chat",
+            messages: messages,
+            temperature: options.temperature || 1.3,
+            max_tokens: options.max_tokens,
+            response_format: options.response_format
+        });
+
+        return {
+            text: response.choices[0].message.content,
+            raw: response
+        };
+    } catch (error) {
+        console.error("DeepSeek Chat Error:", error);
+        throw error;
+    }
+};
+
+module.exports = { translateWithDeepSeek, chatWithDeepSeek };
