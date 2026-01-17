@@ -142,6 +142,11 @@ function App() {
               {onboardingComplete ? <ATSScanner session={session} /> : <Navigate to="/onboarding" />}
             </ProtectedRoute>
           } />
+
+          {/* Admin & Billing Routes */}
+          <Route path="/admin" element={<ProtectedRoute><AdminDashboard session={session} /></ProtectedRoute>} />
+          <Route path="/payment-setup" element={<ProtectedRoute><PaymentSetup /></ProtectedRoute>} />
+
           <Route path="/cv-editor" element={<ProtectedRoute><CVEditor /></ProtectedRoute>} />
           <Route path="/interview" element={<ProtectedRoute><InterviewSimulator session={session} /></ProtectedRoute>} />
           <Route path="/" element={<LandingPage />} />
