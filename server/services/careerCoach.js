@@ -83,6 +83,9 @@ class CareerCoach {
             const cleanText = response.text.replace(/```json\n?|```/g, '').trim();
             const fullAnalysis = JSON.parse(cleanText);
 
+            // Force score to be a Number
+            if (fullAnalysis.score) fullAnalysis.score = Number(fullAnalysis.score);
+
             // Returning full analysis for all users as they "pay with their data"
             return fullAnalysis;
 
